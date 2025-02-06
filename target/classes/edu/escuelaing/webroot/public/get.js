@@ -3,15 +3,15 @@ fetch("http://127.0.0.1:35000/app/get")
     .then(data => {
         console.log("Datos recibidos:", data);
 
+        // Si ya es un objeto, no es necesario hacer parse
+        const parsedData = data.response || data;
+
         const tableBody = document.querySelector("#gradesTable tbody");
         tableBody.innerHTML = "";
 
-        // Iterar sobre las claves del objeto 'data' y crear filas dinámicamente
-        Object.keys(data).forEach(key => {
+        Object.keys(parsedData).forEach(key => {
             const row = document.createElement("tr");
-
-            // Crear celdas con la clave y el valor
-            row.innerHTML = `<td>${key}</td><td>${data[key]}</td>`;
+            row.innerHTML = `<td>${key}</td><td>${parsedData[key]}</td>`;
             tableBody.appendChild(row);
         });
     })

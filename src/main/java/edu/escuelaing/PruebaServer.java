@@ -3,35 +3,40 @@ package edu.escuelaing;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.TreeMap;
+import org.json.JSONObject;
 import java.util.function.BiFunction;
+import com.fasterxml.jackson.databind.ObjectMapper; // Importa Jackson
 
 public class PruebaServer extends HttpServer {
 
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     private static TreeMap<String, Integer> grades = new TreeMap<>();
 
     public static void main(String[] args) {
-        BiFunction<String, Integer, Integer> f1 = (name, grade) -> grades.put(name, grade);
+        BiFunction<HttpRequest, HttpResponse, Integer> f1 = (request, response) -> {
+            String requestBody = request.getQuery();
+            JSONObject json = new JSONObject(requestBody);
+            String nombre = json.getString("nombre");
+            int nota = json.getInt("nota");
+            grades.put(nombre, nota);
+            return nota;
+        };
         get("/app/insert", f1);
-        System.out.println(grades); 
-        BiFunction<String, Integer, String> f2 = (name, grade) -> {
-            grades.put(name, grade);
-            StringBuilder data = new StringBuilder("{");
-            for (String key : grades.keySet()) {
-                data.append("\"").append(key).append("\":").append(grades.get(key)).append(",");
+        
+        BiFunction<HttpRequest, HttpResponse, String> f2 = (request, response) -> {
+            try {
+                return objectMapper.writeValueAsString(grades);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "{}"; // Devuelve un JSON vacío en caso de error
             }
-            if (!grades.isEmpty()) {
-                data.deleteCharAt(data.length() - 1);
-            }
-            data.append("}");
-
-            return data.toString();
         };
         get("/app/get", f2);
+        
         staticFiles("webroot/public");
         try {
             startServer(35000);
         } catch (IOException | URISyntaxException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

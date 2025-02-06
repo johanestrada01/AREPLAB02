@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
 
 public class HttpServer {
 
-    private static Map<String, BiFunction<?, ?, ?>> services = new HashMap();
+    private static Map<String, BiFunction<HttpRequest, HttpResponse, ?>> services = new HashMap();
     private static String staticRute = "";
 
     public static void main(String[] args){
@@ -94,26 +94,41 @@ public class HttpServer {
             }
     }
 
+
     private static HttpRequest readInput(BufferedReader in) throws IOException, URISyntaxException {
         String inputLine;
         URI uri = new URI("/index.html");
         boolean isFirstLine = true;
+        int contentLength = 0;
         while ((inputLine = in.readLine()) != null) {
             System.out.println(inputLine);
             if (isFirstLine) {
                 String[] data = inputLine.split(" ");
                 uri = new URI(data[1]);
                 isFirstLine = false;
-                System.out.println(data[0]);
+            }
+            if (inputLine.startsWith("Content-Length:")) {
+                contentLength = Integer.parseInt(inputLine.split(":\\s*")[1]);
             }
             if (inputLine.isEmpty()) {
                 break;
             }
         }
-        return new HttpRequest(uri.getPath(), uri.getQuery());
+        StringBuilder requestBody = new StringBuilder();
+        if (contentLength > 0) {
+            char[] body = new char[contentLength]; 
+            int bytesRead = in.read(body, 0, contentLength); 
+            if (bytesRead > 0) {
+                requestBody.append(body, 0, bytesRead);
+            }
+            System.out.println("Cuerpo del POST:\n" + requestBody);
+        }
+        String query = (contentLength > 0) ? requestBody.toString() : uri.getQuery();
+        return new HttpRequest(uri.getPath(), query);
     }
+    
 
-    public static <T> void get(String route, BiFunction<?, ?, T> service) {
+    public static <T> void get(String route, BiFunction<HttpRequest, HttpResponse, T> service) {
         services.put(route, service);
     }
 
@@ -130,9 +145,10 @@ public class HttpServer {
         BiFunction<HttpRequest, HttpResponse, ?> s = (BiFunction<HttpRequest, HttpResponse, ?>) services.get(req.getPath());
         System.out.println(req.getQuery() + " a " + req.getPath());
         return "HTTP/1.1 200 OK\r\n"
-                        + "Content-Type: application/json\r\n"
-                        + "\r\n"
-                        + "{\"response\":\""+ s.apply(req, resp) +"\"}";
+        + "Content-Type: application/json\r\n"
+        + "\r\n"
+        + s.apply(req, resp);
+
     }
 
 }
