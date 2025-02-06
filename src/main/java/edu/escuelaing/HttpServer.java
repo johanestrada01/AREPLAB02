@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
 
 public class HttpServer {
 
-    private static Map<String, BiFunction<HttpRequest, HttpResponse, ?>> services = new HashMap();
+    private static Map<String, BiFunction<?, ?, ?>> services = new HashMap();
     private static String staticRute = "";
 
     public static void main(String[] args){
@@ -30,7 +30,6 @@ public class HttpServer {
     }
 
     private static String readHtmlFile(String filePath) throws IOException {
-        System.out.println(getStaticRoute() + filePath);
         StringBuilder contentBuilder = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new java.io.FileReader("target/classes/edu/escuelaing/" + getStaticRoute() + filePath))) {
             String line;
@@ -78,7 +77,6 @@ public class HttpServer {
 
                 }
             }
-            System.out.println(output);
             out.print(output);   
             out.close();
             clientSocket.close();
@@ -114,7 +112,7 @@ public class HttpServer {
         return new HttpRequest(uri.getPath(), uri.getQuery());
     }
 
-    public static <T> void get(String route, BiFunction<HttpRequest, HttpResponse, T> service) {
+    public static <T> void get(String route, BiFunction<?, ?, T> service) {
         services.put(route, service);
     }
 
@@ -128,8 +126,8 @@ public class HttpServer {
     }
     
     private static String processRequest(HttpRequest req, HttpResponse resp) {
-        System.out.println("Query: " + req.getQuery());
-        BiFunction<HttpRequest, HttpResponse, ?> s = services.get(req.getPath());
+        BiFunction<HttpRequest, HttpResponse, ?> s = (BiFunction<HttpRequest, HttpResponse, ?>) services.get(req.getPath());
+        System.out.println(req.getQuery() + " a " + req.getPath());
         return "HTTP/1.1 200 OK\r\n"
                         + "Content-Type: application/json\r\n"
                         + "\r\n"
