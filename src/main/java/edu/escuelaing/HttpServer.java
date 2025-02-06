@@ -106,6 +106,7 @@ public class HttpServer {
                 String[] data = inputLine.split(" ");
                 uri = new URI(data[1]);
                 isFirstLine = false;
+                System.out.println(data[0]);
             }
             if (inputLine.isEmpty()) {
                 break;
