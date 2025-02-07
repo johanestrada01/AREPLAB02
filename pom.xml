@@ -7,6 +7,38 @@
   <version>1.0-SNAPSHOT</version>
   <name>web-server</name>
   <url>http://maven.apache.org</url>
+  <build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
+            <configuration>
+                <source>17</source> 
+                <target>17</target>
+                <mainClass>edu.escuelaing.PruebaServer</mainClass> 
+            </configuration>
+        </plugin>
+        <plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>exec-maven-plugin</artifactId>
+    <version>3.5.0</version>
+    <configuration>
+        <mainClass>edu.escuelaing.PruebaServer</mainClass>
+    </configuration>
+</plugin>
+
+    </plugins>
+      <resources>
+        <resource>
+            <directory>src/main/java/edu/escuelaing</directory>
+            <targetPath>${project.build.outputDirectory}/edu/escuelaing</targetPath>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </resource>
+    </resources>
+</build>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -25,6 +57,46 @@
     <version>2.15.0</version> 
 </dependency>
 
+<dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>5.9.2</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>5.9.2</version>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- Mockito para simular objetos -->
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>4.8.0</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-junit-jupiter</artifactId>
+        <version>4.8.0</version>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- Jackson para manipulación de JSON -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.15.0</version>
+    </dependency>
+
+    <!-- JSON para manejar peticiones JSON -->
+    <dependency>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+        <version>20230227</version>
+    </dependency>
 
   </dependencies>
 </project>

@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
 
 public class HttpServer {
 
-    private static Map<String, BiFunction<HttpRequest, HttpResponse, ?>> services = new HashMap();
+    static Map<String, BiFunction<HttpRequest, HttpResponse, ?>> services = new HashMap();
     private static String staticRute = "";
 
     public static void main(String[] args){

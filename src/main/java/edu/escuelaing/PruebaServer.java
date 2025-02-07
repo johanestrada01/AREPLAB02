@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper; // Importa Jackson
 public class PruebaServer extends HttpServer {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static TreeMap<String, Integer> grades = new TreeMap<>();
+    static TreeMap<String, Integer> grades = new TreeMap<>();
 
     public static void main(String[] args) {
         BiFunction<HttpRequest, HttpResponse, Integer> f1 = (request, response) -> {
