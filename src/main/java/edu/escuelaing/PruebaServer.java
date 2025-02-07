@@ -28,11 +28,10 @@ public class PruebaServer extends HttpServer {
                 return objectMapper.writeValueAsString(grades);
             } catch (IOException e) {
                 e.printStackTrace();
-                return "{}"; // Devuelve un JSON vacío en caso de error
+                return "{}"; 
             }
         };
         get("/app/get", f2);
-        
         staticFiles("webroot/public");
         try {
             startServer(35000);

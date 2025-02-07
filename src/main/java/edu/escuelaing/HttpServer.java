@@ -148,7 +148,6 @@ public class HttpServer {
         + "Content-Type: application/json\r\n"
         + "\r\n"
         + s.apply(req, resp);
-
     }
 
 }
