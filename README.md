@@ -2,9 +2,9 @@
 
 ## Descripción
 
-Este proyecto implementa un servidor web en Java utilizando solo las bibliotecas estándar de Java, sin la necesidad de frameworks como Spring o Spark. El servidor maneja solicitudes HTTP en el puerto 35000 y puede servir diferentes tipos de contenido, incluyendo HTML, imágenes, archivos JavaScript, hojas de estilo CSS y datos en formato JSON. 
+Este proyecto implementa un FrameWork web en Java utilizando solo las bibliotecas estándar de Java, sin la necesidad de frameworks como Spring o Spark. El servidor maneja solicitudes HTTP en el puerto 35000 y puede servir diferentes tipos de contenido, incluyendo HTML, imágenes, archivos JavaScript, hojas de estilo CSS y datos en formato JSON. 
 
-Además, el servidor tiene la capacidad de recibir y almacenar notas de estudiantes a través de solicitudes POST en formato JSON. Los datos de las notas se guardan en un mapa en memoria, y las solicitudes GET permiten consultar la lista de notas almacenadas.
+Además, se usa como prueba un servidor que tiene la capacidad de recibir y almacenar notas de estudiantes a través de solicitudes POST en formato JSON. Los datos de las notas se guardan en un mapa en memoria, y las solicitudes GET permiten consultar la lista de notas almacenadas.
 
 ### Características principales
 
@@ -26,11 +26,14 @@ Además, el servidor tiene la capacidad de recibir y almacenar notas de estudian
 
 ### Clonación del repositorio
 ```sh
- git clone https://github.com/johanestrada01/AREP_LAB01.git
+ git clone https://github.com/johanestrada01/AREPLAB02.git
  cd AREP_LAB01
  mvn clean install
  mvn exec:java
 ```
+
+### Uso
+- El usuario puede extender la clase HttpServer que le va a proporcionar metodos para iniciar un servicio web. El usuario debe crear los metodos REST por medio del metodo get y funciones lambda, y puede iniciar el servicio por el puerto deseado usando el metodo startServer. Hay un metodo que permite indicar al servidor donde encontrar los archivos estáticos.
 
 ### Acceso
 - Ingresar a 127.0.0.1:35000
@@ -46,8 +49,9 @@ Además, el servidor tiene la capacidad de recibir y almacenar notas de estudian
 
 ### Servicios REST
 
-- http://127.0.0.1:35000/data.app -> Extrae los datos que se encuentran actualmente en el sistema y los retorna en formato JSON.
-- http://127.0.0.1:35000/insert.app -> Envia datos al servidor para ser almacenados.
+- http://127.0.0.1:35000/app/data -> Extrae los datos que se encuentran actualmente en el sistema y los retorna en formato JSON.
+- http://127.0.0.1:35000/app/insert -> Envia datos al servidor para ser almacenados.
+- (Los servicios REST son manejados por medio de funciones lambda que pueden ser inyectados)
 
 ## Pruebas
 
